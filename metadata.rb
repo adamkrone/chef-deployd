@@ -6,3 +6,4 @@ description					"Installs and configures deployd"
 version							"0.1.0"
 
 depends "nodejs"
+depends "mongodb"

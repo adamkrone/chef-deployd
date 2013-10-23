@@ -24,6 +24,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 
+include_recipe "mongodb::10gen_repo"
+include_recipe "mongodb"
 include_recipe "nodejs"
 
 execute "npm install -g deployd" do
