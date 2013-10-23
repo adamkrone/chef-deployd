@@ -24,6 +24,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 
+include_recipe "nodejs"
+
 execute "npm install -g deployd" do
 	command "npm install -g deployd"
 	action :run
