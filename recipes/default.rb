@@ -39,7 +39,7 @@ end
 
 # Change permissions for dpd
 execute "chown dpd" do
-	command "sudo chown #{node['deployd']['user']}: /usr/local/bin/dpd"
+	command "sudo chown #{node['deployd']['user']}:#{node['deployd']['group']} /usr/local/bin/dpd"
 	action :run
 end
 

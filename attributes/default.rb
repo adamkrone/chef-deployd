@@ -20,3 +20,9 @@
 #
 
 default['deployd']['user'] = "deployd"
+default['deployd']['group'] = "deployd"
+
+default['deployd']['repo_revision'] = "master"
+
+default['deployd']['monitor'] = "upstart"
+default['deployd']['port'] = 80

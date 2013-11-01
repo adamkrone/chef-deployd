@@ -1,0 +1,6 @@
+start on runlevel [2345]
+stop on runlevel [016]
+
+chdir <%= node['deployd']['app_dir'] %>
+exec sudo -u <%= node['deployd']['user'] %> sh -c "dpd -p <%= node['deployd']['port'] %>"
+respawn
