@@ -37,6 +37,11 @@ case node['deployd']['repo_type']
 		end
 	when "hg"
 	when "zip"
+	when "vagrant"
+		log "vagrant" do
+			message "Using locally provided app repo"
+			level :info
+		end
 end
 
 case node['deployd']['monitor']
