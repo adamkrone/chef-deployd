@@ -66,11 +66,6 @@ case node['deployd']['monitor']
             action [:enable, :start]
         end
     when "forever"
-        execute "install forever" do
-            command "sudo npm install -g forever"
-            action :run
-        end
-
         execute "start app" do
             cwd node['deployd']['app_dir']
             command "sudo -u #{node['deployd']['user']} forever start #{node['deployd']['app_script']}"
