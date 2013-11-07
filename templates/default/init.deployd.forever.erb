@@ -1,0 +1,7 @@
+#!upstart
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+chdir <%= node['deployd']['app_dir'] %>
+exec sudo su <%= node['deployd']['user'] %> -c "<%= node['deployd']['app_dir'] %>/node_modules/forever/bin/forever start <%= node['deployd']['app_script'] %>"

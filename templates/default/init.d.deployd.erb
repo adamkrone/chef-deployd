@@ -1,6 +1,8 @@
+#!upstart
+
 start on runlevel [2345]
 stop on runlevel [016]
 
 chdir <%= node['deployd']['app_dir'] %>
-exec sudo -u <%= node['deployd']['user'] %> sh -c "dpd -p <%= node['deployd']['port'] %>"
+exec sudo -u <%= node['deployd']['user'] %> sh -c "/usr/local/bin/node <%= node['deployd']['app_script'] %>"
 respawn

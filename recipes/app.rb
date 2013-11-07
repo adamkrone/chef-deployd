@@ -56,19 +56,31 @@ end
 
 case node['deployd']['monitor']
     when "upstart"
-        template "/etc/init.d/#{node['deployd']['app_name']}" do
-            source "init.d.deployd.erb"
+        template "/etc/init/#{node['deployd']['app_name']}.conf" do
+            source "init.deployd.erb"
             mode 00755
             action :create
         end
 
         service node['deployd']['app_name'] do
+            provider Chef::Provider::Service::Upstart
             action [:enable, :start]
         end
     when "forever"
-        execute "start app" do
-            cwd node['deployd']['app_dir']
-            command "sudo -u #{node['deployd']['user']} forever start #{node['deployd']['app_script']}"
-            action :run
+        template "/etc/init/#{node['deployd']['app_name']}.conf" do
+            source "init.deployd.forever.erb"
+            mode 00755
+            action :create
         end
+
+        service node['deployd']['app_name'] do
+            provider Chef::Provider::Service::Upstart
+            action [:enable, :start]
+        end
+
+#        execute "start app" do
+            #cwd node['deployd']['app_dir']
+            #command "sudo su #{node['deployd']['user']} -c '#{node['deployd']['app_dir']}/node_modules/forever/bin/forever start #{node['deployd']['app_script']}'"
+            #action :run
+#        end
 end
