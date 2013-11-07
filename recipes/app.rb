@@ -4,7 +4,7 @@
 #
 # Copyright 2013, Adam Krone
 # Authors:
-# 		Adam Krone <krone.adam@gmail.com>
+#       Adam Krone <krone.adam@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,48 +22,54 @@
 include_recipe "deployd::default"
 
 directory node['deployd']['app_dir'] do
-	owner node['deployd']['user']
-	group node['deployd']['group']
-	recursive true
-	action :create
+    owner node['deployd']['user']
+    group node['deployd']['group']
+    recursive true
+    action :create
 end
 
 case node['deployd']['repo_type']
-	when "git"
-		git node['deployd']['app_dir'] do
-			repository node['deployd']['repo_url']
-			revision node['deployd']['repo_revision']
-			action :sync
-		end
-	when "hg"
-	when "zip"
-	when "vagrant"
-		log "vagrant" do
-			message "Using locally provided app repo"
-			level :info
-		end
+    when "git"
+        git node['deployd']['app_dir'] do
+            repository node['deployd']['repo_url']
+            revision node['deployd']['repo_revision']
+            action :sync
+        end
+    when "hg"
+    when "zip"
+    when "vagrant"
+        log "vagrant" do
+            message "Using locally provided app repo"
+            level :info
+        end
+end
+
+execute "Install packages" do
+    cwd node['deployd']['app_dir']
+    command "npm install"
+    action :run
 end
 
 case node['deployd']['monitor']
-	when "upstart"
-		template "/etc/init.d/#{node['deployd']['app_name']}" do
-			source "init.d.deployd.erb"
+    when "upstart"
+        template "/etc/init.d/#{node['deployd']['app_name']}" do
+            source "init.d.deployd.erb"
             mode 00755
-			action :create
-		end
+            action :create
+        end
 
-		service node['deployd']['app_name'] do
-			action [:enable, :start]
-		end
-	when "forever"
-		execute "install forever" do
-			command "sudo npm install -g forever"
-			action :run
-		end
+        service node['deployd']['app_name'] do
+            action [:enable, :start]
+        end
+    when "forever"
+        execute "install forever" do
+            command "sudo npm install -g forever"
+            action :run
+        end
 
-		execute "start app" do
-			cwd node['deployd']['app_dir']
-			command "sudo -u #{node['deployd']['user']} forever start #{node['deployd']['app_script']}"
-			action :run
-		end
+        execute "start app" do
+            cwd node['deployd']['app_dir']
+            command "sudo -u #{node['deployd']['user']} forever start #{node['deployd']['app_script']}"
+            action :run
+        end
 end
