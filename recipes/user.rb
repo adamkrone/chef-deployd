@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: deployd
-# Recipe:: default
+# Recipe:: user
 #
 # Copyright 2013, Adam Krone
 # Authors:
@@ -19,26 +19,10 @@
 # limitations under the License.
 #
 
-# Install dependecies
-include_recipe "mongodb::10gen_repo"
-include_recipe "mongodb"
-include_recipe "nodejs"
-include_recipe "deployd::user"
-
-# Install deployd with npm
-execute "install deployd with npm" do
-	command "sudo npm install -g deployd"
+# Add deployd system user
+execute "add #{node['deployd']['user']} user" do
+	command "useradd -m -s /bin/bash #{node['deployd']['user']}"
 	action :run
+	not_if "cat /etc/passwd | grep #{node['deployd']['user']}"
 end
 
-# Change permissions for dpd
-execute "chown dpd" do
-	command "sudo chown #{node['deployd']['user']}:#{node['deployd']['group']} /usr/local/bin/dpd"
-	action :run
-end
-
-# Change permissions for deployd lib
-execute "chown deployd lib" do
-	command "sudo chown -R #{node['deployd']['user']}: /usr/local/lib/node_modules/deployd"
-	action :run
-end

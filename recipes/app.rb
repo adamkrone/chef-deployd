@@ -19,7 +19,11 @@
 # limitations under the License.
 #
 
-include_recipe "deployd::default"
+# Install dependecies
+include_recipe "mongodb::10gen_repo"
+include_recipe "mongodb"
+include_recipe "nodejs"
+include_recipe "deployd::user"
 
 directory node['deployd']['app_dir'] do
     owner node['deployd']['user']
