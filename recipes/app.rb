@@ -48,6 +48,7 @@ case node['deployd']['monitor']
 	when "upstart"
 		template "/etc/init.d/#{node['deployd']['app_name']}" do
 			source "init.d.deployd.erb"
+            mode 00755
 			action :create
 		end
 
